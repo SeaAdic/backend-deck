@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--
+	R+ Sprint Deck — TEMPLATE
+	================================================================
+	To start a new sprint demo:
+
+	    cp -r decks/_template decks/sprint-YYYY-MM-DD
+
+	Then:
+	  1. Edit the <title> and the title slide below.
+	  2. Drop screenshots into the deck's own images/ folder and
+	     reference them as <img src="images/your-shot.png" />.
+	  3. Write your slides — the styled components you can use
+	     (pill, callout, theme-grid, code-pair, flow, layer-table,
+	     world-grid, dash-list, bullets…) all live in
+	     decks/_shared/deck.css. A few are demonstrated below.
+	  4. Add the deck to the DECKS list in the root index.html so it
+	     shows up on the hub.
+
+	Run `npm start` from the repo root and open
+	http://localhost:8000/decks/sprint-YYYY-MM-DD/
+-->
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+
+		<title>Sprint Demo — Template</title>
+
+		<link rel="stylesheet" href="../../reveal.js/dist/reset.css" />
+		<link rel="stylesheet" href="../../reveal.js/dist/reveal.css" />
+		<link rel="stylesheet" href="../../reveal.js/dist/theme/black.css" id="theme" />
+		<link rel="stylesheet" href="../../reveal.js/dist/plugin/highlight/monokai.css" />
+
+		<!-- Shared R+ design system -->
+		<link rel="stylesheet" href="../_shared/deck.css" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- 1. Title -->
+				<section>
+					<h2>Sprint Demo</h2>
+					<p class="subtle">One line on what this sprint was about</p>
+					<p class="subtle" style="margin-top: 2rem; font-size: 0.6em">
+						Team · R+ Sprint · Mon DD – Mon DD, YYYY
+					</p>
+				</section>
+
+				<!-- 2. Agenda — theme cards -->
+				<section>
+					<h3>What we shipped</h3>
+					<p class="subtle" style="font-size: 0.6em; margin: 0">
+						A short framing sentence for the sprint.
+					</p>
+					<div class="theme-grid">
+						<div class="theme-card">
+							<h4>Theme one</h4>
+							<ul>
+								<li>First thing you did</li>
+								<li>Second thing you did</li>
+							</ul>
+							<span class="tix">RPX-0000 · RPX-0000</span>
+						</div>
+						<div class="theme-card cool">
+							<h4>Theme two</h4>
+							<ul>
+								<li>Another change</li>
+								<li>And another</li>
+							</ul>
+							<span class="tix">RPX-0000</span>
+						</div>
+						<div class="theme-card warm">
+							<h4>Theme three</h4>
+							<ul>
+								<li>Infra / cleanup item</li>
+							</ul>
+							<span class="tix">RPX-0000</span>
+						</div>
+					</div>
+				</section>
+
+				<!-- 3. A ticket — before/after code -->
+				<section>
+					<h3>
+						RPX-0000 — what you changed
+						<span class="pill ok">completed</span>
+					</h3>
+					<div class="code-pair">
+						<div>
+							<div class="label before">Before</div>
+							<pre><code class="language-python" data-trim data-noescape># the old behaviour
+def handler(req):
+    return ok()  # bug lived here</code></pre>
+						</div>
+						<div>
+							<div class="label after">After</div>
+							<pre><code class="language-python" data-trim data-noescape># the fix
+def handler(req):
+    validate(req)
+    return ok()</code></pre>
+						</div>
+					</div>
+					<div class="callout">
+						<p style="margin: 0; font-size: 0.7em">
+							One sentence on <strong>why this matters</strong> for the
+							product or the next person on call.
+						</p>
+					</div>
+				</section>
+
+				<!-- 4. Closing -->
+				<section>
+					<h2>Questions?</h2>
+				</section>
+			</div>
+
+			<!-- HUD chrome (kept outside .slides so it stays fixed) -->
+			<div class="deck-chrome" aria-hidden="true">
+				<div class="ch-top">
+					<span class="brand">R+</span>
+					<span class="sep">//</span>
+					<span>Sprint Demo</span>
+					<span class="right">Team · Mon DD – Mon DD</span>
+				</div>
+				<span class="tick tl"></span>
+				<span class="tick tr"></span>
+				<span class="tick bl"></span>
+				<span class="tick br"></span>
+			</div>
+		</div>
+
+		<div class="grain" aria-hidden="true"></div>
+
+		<script src="../../reveal.js/dist/reveal.js"></script>
+		<script src="../../reveal.js/dist/plugin/notes.js"></script>
+		<script src="../../reveal.js/dist/plugin/highlight.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				progress: true,
+				slideNumber: 'c/t',
+				transition: 'fade',
+				transitionSpeed: 'default',
+				backgroundTransition: 'fade',
+				plugins: [RevealHighlight, RevealNotes],
+			});
+		</script>
+	</body>
+</html>

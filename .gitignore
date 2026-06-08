@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+*.log
+
+# Sprint decks stay LOCAL — they hold internal sprint content and shouldn't be
+# pushed. The shared design system, the template, and the deck README ARE
+# tracked so the repo stays a usable starting point for everyone.
+decks/*
+!decks/_shared/
+!decks/_template/
+!decks/README.md
+!decks/decks.example.js
+# decks/decks.js itself stays ignored (your local deck list)

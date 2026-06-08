@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>R+ Sprint Demos</title>
+		<meta
+			name="description"
+			content="A home for backend engineers to walk the team through what shipped each sprint."
+		/>
+		<link
+			rel="icon"
+			href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0e16'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' fill='%235fe3b3' text-anchor='middle'%3ER%2B%3C/text%3E%3C/svg%3E"
+		/>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			:root {
+				--bg: #0a0e16;
+				--ink: #eaeff7;
+				--ink-dim: #c4cdda;
+				--muted: #818da0;
+				--accent: #5fe3b3;
+				--accent-warm: #ffb454;
+				--accent-cool: #6cb4ff;
+				--line: rgba(255, 255, 255, 0.09);
+				--line-strong: rgba(255, 255, 255, 0.17);
+				--panel: rgba(255, 255, 255, 0.035);
+				--font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+				--font-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+				--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: var(--bg);
+				color: var(--ink-dim);
+				font-family: var(--font-body);
+				-webkit-font-smoothing: antialiased;
+				min-height: 100%;
+			}
+
+			body {
+				background-image:
+					radial-gradient(
+						1100px 720px at 82% -12%,
+						rgba(95, 227, 179, 0.1),
+						transparent 58%
+					),
+					radial-gradient(
+						900px 640px at -12% 112%,
+						rgba(108, 180, 255, 0.09),
+						transparent 58%
+					),
+					linear-gradient(180deg, #0b101b 0%, #0a0e16 58%, #07090f 100%);
+				background-attachment: fixed;
+			}
+
+			/* ---------- grain ---------- */
+			.grain {
+				position: fixed;
+				inset: 0;
+				z-index: 60;
+				pointer-events: none;
+				opacity: 0.045;
+				mix-blend-mode: overlay;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+				background-size: 160px 160px;
+			}
+
+			/* ---------- HUD chrome ---------- */
+			.tick {
+				position: fixed;
+				width: 13px;
+				height: 13px;
+				z-index: 50;
+				border: 0 solid var(--line-strong);
+				pointer-events: none;
+			}
+			.tick.tl { top: 18px; left: 20px; border-left-width: 1px; border-top-width: 1px; }
+			.tick.tr { top: 18px; right: 20px; border-right-width: 1px; border-top-width: 1px; }
+			.tick.bl { bottom: 18px; left: 20px; border-left-width: 1px; border-bottom-width: 1px; }
+			.tick.br { bottom: 18px; right: 20px; border-right-width: 1px; border-bottom-width: 1px; }
+
+			.topbar {
+				position: relative;
+				display: flex;
+				align-items: center;
+				gap: 0.7em;
+				font-family: var(--font-mono);
+				font-size: 11px;
+				font-weight: 500;
+				letter-spacing: 0.22em;
+				text-transform: uppercase;
+				color: var(--muted);
+				padding: 26px 44px 0;
+			}
+			.topbar .brand {
+				color: var(--accent);
+				font-weight: 700;
+			}
+			.topbar .sep {
+				color: var(--line-strong);
+			}
+			.topbar .right {
+				margin-left: auto;
+			}
+
+			/* ---------- layout ---------- */
+			.wrap {
+				max-width: 1080px;
+				margin: 0 auto;
+				padding: 0 44px 96px;
+			}
+
+			header.hero {
+				padding: 72px 0 40px;
+				border-bottom: 1px solid var(--line);
+				margin-bottom: 44px;
+			}
+
+			.eyebrow {
+				font-family: var(--font-mono);
+				font-size: 12px;
+				letter-spacing: 0.24em;
+				text-transform: uppercase;
+				color: var(--accent);
+				margin: 0 0 1.1rem;
+			}
+
+			h1 {
+				font-family: var(--font-display);
+				font-weight: 800;
+				font-size: clamp(2.4rem, 6vw, 4rem);
+				line-height: 1.02;
+				letter-spacing: -0.03em;
+				margin: 0 0 1.1rem;
+				background: linear-gradient(180deg, #ffffff, #aebccd);
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+			}
+
+			.lede {
+				font-size: clamp(1rem, 2vw, 1.2rem);
+				line-height: 1.6;
+				color: var(--ink-dim);
+				max-width: 60ch;
+				margin: 0;
+			}
+			.lede strong {
+				color: var(--ink);
+				font-weight: 600;
+			}
+
+			.section-label {
+				display: flex;
+				align-items: center;
+				gap: 0.8em;
+				font-family: var(--font-mono);
+				font-size: 12px;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: var(--muted);
+				margin: 0 0 1.6rem;
+			}
+			.section-label::after {
+				content: '';
+				flex: 1;
+				height: 1px;
+				background: var(--line);
+			}
+			.section-label .count {
+				color: var(--accent);
+			}
+
+			/* ---------- deck cards ---------- */
+			.deck-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+				gap: 1.4rem;
+			}
+
+			.deck-card {
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: 16px;
+				padding: 1.5rem 1.5rem 1.35rem;
+				text-decoration: none;
+				color: inherit;
+				overflow: hidden;
+				transition: transform 0.35s ease, border-color 0.35s ease,
+					background 0.35s ease;
+			}
+			.deck-card::after {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 3px;
+				width: 100%;
+				background: var(--card-accent, var(--accent));
+				opacity: 0.85;
+			}
+			.deck-card:hover {
+				transform: translateY(-5px);
+				border-color: var(--line-strong);
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			.deck-card .meta {
+				display: flex;
+				align-items: center;
+				gap: 0.6em;
+				font-family: var(--font-mono);
+				font-size: 11px;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				color: var(--muted);
+				margin-bottom: 1rem;
+			}
+			.deck-card .meta .dot {
+				width: 7px;
+				height: 7px;
+				border-radius: 50%;
+				background: var(--card-accent, var(--accent));
+				box-shadow: 0 0 10px var(--card-accent, var(--accent));
+			}
+
+			.deck-card h3 {
+				font-family: var(--font-display);
+				font-weight: 800;
+				color: var(--ink);
+				font-size: 1.32rem;
+				line-height: 1.12;
+				letter-spacing: -0.015em;
+				margin: 0 0 0.7rem;
+			}
+
+			.deck-card p {
+				font-size: 0.92rem;
+				line-height: 1.55;
+				color: var(--ink-dim);
+				margin: 0 0 1.3rem;
+			}
+
+			.tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.45rem;
+				margin-top: auto;
+			}
+			.tag {
+				font-family: var(--font-mono);
+				font-size: 10px;
+				font-weight: 500;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				padding: 0.32em 0.6em;
+				border: 1px solid var(--line);
+				border-radius: 6px;
+				background: rgba(255, 255, 255, 0.025);
+				color: var(--muted);
+			}
+
+			.deck-card .open {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-top: 1.25rem;
+				padding-top: 1.1rem;
+				border-top: 1px solid var(--line);
+				font-family: var(--font-mono);
+				font-size: 0.78rem;
+				letter-spacing: 0.06em;
+				color: var(--card-accent, var(--accent));
+			}
+			.deck-card .open .arrow {
+				transition: transform 0.3s ease;
+			}
+			.deck-card:hover .open .arrow {
+				transform: translateX(5px);
+			}
+
+			/* ---------- empty state ---------- */
+			.empty {
+				border: 1px dashed var(--line-strong);
+				border-radius: 16px;
+				padding: 3rem 2rem;
+				text-align: center;
+				color: var(--muted);
+				font-size: 0.95rem;
+			}
+
+			/* ---------- footer / add-a-deck ---------- */
+			footer {
+				margin-top: 56px;
+				padding-top: 28px;
+				border-top: 1px solid var(--line);
+				display: flex;
+				flex-wrap: wrap;
+				align-items: baseline;
+				gap: 0.6em;
+				font-family: var(--font-mono);
+				font-size: 0.8rem;
+				color: var(--muted);
+				line-height: 1.7;
+			}
+			footer code {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid var(--line);
+				border-radius: 5px;
+				padding: 0.12em 0.42em;
+				color: #d7e6ff;
+				font-size: 0.92em;
+			}
+			footer a {
+				color: var(--accent-cool);
+				text-decoration: none;
+			}
+			footer a:hover {
+				color: var(--accent);
+			}
+
+			@media (max-width: 640px) {
+				.topbar { padding: 22px 22px 0; }
+				.wrap { padding: 0 22px 64px; }
+				.topbar .right { display: none; }
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				.deck-card,
+				.deck-card .open .arrow {
+					transition: none;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<span class="tick tl"></span>
+		<span class="tick tr"></span>
+		<span class="tick bl"></span>
+		<span class="tick br"></span>
+
+		<div class="topbar">
+			<span class="brand">R+</span>
+			<span class="sep">//</span>
+			<span>Sprint Demos</span>
+			<span class="right">Backend · Engineering</span>
+		</div>
+
+		<div class="wrap">
+			<header class="hero">
+				<p class="eyebrow">Remit Plus · Engineering</p>
+				<h1>Sprint Demos</h1>
+				<p class="lede">
+					A home for the backend team to walk everyone through
+					<strong>what shipped each sprint</strong> — the bugs we chased,
+					the fixes we deployed, and the numbers behind them. Pick a deck
+					to present, or open it full-screen and click through.
+				</p>
+			</header>
+
+			<main>
+				<p class="section-label">
+					Decks <span class="count" id="deck-count"></span>
+				</p>
+				<div class="deck-grid" id="deck-grid"></div>
+			</main>
+
+			<footer>
+				<span>
+					New sprint? <code>cp -r decks/_template decks/sprint-YYYY-MM-DD</code>,
+					write your slides, then add an entry to your local
+					<code>decks/decks.js</code>. See <a href="decks/README.md">decks/README.md</a>.
+				</span>
+			</footer>
+		</div>
+
+		<div class="grain" aria-hidden="true"></div>
+
+		<!--
+			Your deck list lives in decks/decks.js (gitignored, kept local so
+			sprint content never lands in the repo). Copy decks/decks.example.js
+			to decks/decks.js and add your decks there.
+		-->
+		<script src="decks/decks.js"></script>
+
+		<script>
+			// Decks come from window.DECKS, set by decks/decks.js above. On a
+			// fresh clone that file doesn't exist yet, so we fall back to an
+			// empty list and show the empty state.
+			const DECKS = Array.isArray(window.DECKS) ? window.DECKS : [];
+
+			// ------------------------------------------------------------
+			const ACCENTS = {
+				mint: 'var(--accent)',
+				cool: 'var(--accent-cool)',
+				warm: 'var(--accent-warm)',
+			};
+			const ROTATION = ['mint', 'cool', 'warm'];
+
+			const esc = (s) =>
+				String(s).replace(
+					/[&<>"]/g,
+					(c) =>
+						({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])
+				);
+
+			const grid = document.getElementById('deck-grid');
+			const sorted = [...DECKS].sort((a, b) =>
+				(b.date || '').localeCompare(a.date || '')
+			);
+
+			document.getElementById('deck-count').textContent =
+				'(' + sorted.length + ')';
+
+			if (!sorted.length) {
+				grid.innerHTML =
+					'<div class="empty">No decks yet — copy <code>decks/decks.example.js</code> to <code>decks/decks.js</code> and add your decks.</div>';
+			} else {
+				grid.innerHTML = sorted
+					.map((d, i) => {
+						const accent = ACCENTS[d.accent] || ACCENTS[ROTATION[i % 3]];
+						const tags = (d.tags || [])
+							.map((t) => `<span class="tag">${esc(t)}</span>`)
+							.join('');
+						return `
+						<a class="deck-card" href="${esc(d.path)}" style="--card-accent: ${accent}">
+							<div class="meta">
+								<span class="dot"></span>
+								<span>${esc(d.sprint || '')}</span>
+							</div>
+							<h3>${esc(d.title)}</h3>
+							<p>${esc(d.blurb || '')}</p>
+							<div class="tags">${tags}</div>
+							<div class="open">
+								<span>Open deck</span>
+								<span class="arrow">→</span>
+							</div>
+						</a>`;
+					})
+					.join('');
+			}
+		</script>
+	</body>
+</html>
