@@ -6,6 +6,19 @@ home page (`index.html`) links to all of them.
 
 ![The Sprint Demos hub — one card per sprint, newest first](docs/main_page.png)
 
+## The fast path
+
+Open this repo in [Claude Code](https://claude.com/claude-code) and ask it to
+build your deck from Jira (replace `your.username` with your Jira username):
+
+> Create a sprint deck for everything `your.username` closed in the current
+> sprint — pull my RPX tickets, group them into themes, and add the deck to my
+> local `decks/decks.js` so it shows on the hub.
+
+Claude reads the tickets (and your merged PRs if you ask), drafts the slides
+using the shared styles, and registers the deck for you. See
+[CLAUDE.md](CLAUDE.md) for more prompts.
+
 [reveal.js](https://github.com/hakimel/reveal.js) is vendored as a **git
 submodule** (`reveal.js/`, pinned to v6.0.1) rather than copied in, so this
 repo only holds our own content — the hub and the decks.
